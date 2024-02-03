@@ -99,4 +99,13 @@ mod tests {
         let result = eval(ast.unwrap());
         assert_eq!(result.unwrap(), -3.0);
     }
+
+    // Pruebo el grado
+    #[test]
+    fn test_eval9() {
+        let tokens = lexer("90.0o");
+        let ast = parse(tokens.unwrap());
+        let result = eval(ast.unwrap());
+        assert_eq!(result.unwrap(), 90.0 * std::f32::consts::PI / 180.0);
+    }
 }

@@ -23,6 +23,20 @@ fn parse_number(tokens: &[Token]) -> Option<Node> {
     None
 }
 
+// Parsea un ángulo
+fn parse_degree(tokens: &[Token]) -> Option<Node> {
+    if tokens.len() == 1 {
+        match &tokens[0] {
+            Token::Degree(d) => {
+                let node = Node::Degree(d.to_string());
+                return Some(node);
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
 // Parsea la operación potencia entre dos expresiones
 fn parse_pow(tokens: &[Token]) -> Option<Node> {
     let mut opened_parenthesis = 0;
@@ -256,11 +270,14 @@ fn parse_expression(tokens: &[Token]) -> Option<Node> {
     if node.is_none() {
         node = parse_divide(tokens);
     }
-    if (node.is_none()) {
+    if node.is_none() {
         node = parse_constant(tokens);
     }
     if node.is_none() {
         node = parse_number(tokens)
+    }
+    if node.is_none() {
+        node = parse_degree(tokens)
     }
 
     node
@@ -275,7 +292,8 @@ Grammar!
 S -> Expression
 
 Expression -> Add | Substract |
-              Multiply | Divide | BetweenParenthesisExpression | Number | LeftSideExpression
+              Multiply | Divide | BetweenParenthesisExpression | Number | LeftSideExpression |
+              Degree | Constant
 
 BetweenParenthesisExpression ->  LeftParenthesis LeftSideExpression RightParenthesis
 
@@ -284,6 +302,7 @@ Add -> LeftSideExpression PlusOp Expression
 Substract -> LeftSideExpression MinusOp Expression
 Multiply -> LeftSideExpression MultiplyOp Expression
 Divide -> LeftSideExpression DivideOp Expression
+Degree -> Expression DegreeOp
 
 
 */

@@ -6,8 +6,10 @@ use crate::structs::{InterpreterError, MathConstants, Token};
 
 const NUMBER_REGEX: &str = r"^\d+(\.\d*)?$";
 
+const DEGREE_REGEX: &str = r"^\d+(\.\d*)?(o)$";
+
 fn is_pi(source: &str) -> bool {
-    source == "pi"
+    (source == "pi") || (source == "π")
 }
 fn is_e(source: &str) -> bool {
     source == "e"
@@ -15,6 +17,10 @@ fn is_e(source: &str) -> bool {
 
 fn is_number(source: &str) -> bool {
     let re = Regex::new(NUMBER_REGEX).unwrap();
+    re.is_match(source)
+}
+fn is_degree(source: &str) -> bool {
+    let re = Regex::new(DEGREE_REGEX).unwrap();
     re.is_match(source)
 }
 fn is_pow(source: &str) -> bool {
@@ -43,6 +49,9 @@ fn get_possible_tokens(source: &str) -> Vec<Token> {
     let mut possible_tokens: Vec<Token> = Vec::new();
     if is_number(source) {
         possible_tokens.push(Token::Number(source.to_string()));
+    }
+    if is_degree(source) {
+        possible_tokens.push(Token::Degree(source.to_string()));
     }
     if is_pow(source) {
         possible_tokens.push(Token::PowOp);

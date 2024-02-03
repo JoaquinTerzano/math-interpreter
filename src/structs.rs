@@ -12,6 +12,7 @@ pub enum MathConstants {
 pub enum Token {
     Number(String),
     Constant(MathConstants),
+    Degree(String),
     PlusOp,
     MinusOp,
     MultiplyOp,
@@ -33,6 +34,7 @@ pub enum Node {
     Pow(Box<Node>, Box<Node>),
     Number(String),
     Constant(MathConstants),
+    Degree(String),
 }
 
 #[derive(Debug, Clone)]
@@ -53,3 +55,11 @@ pub enum InterpreterError {
     }
 }
  */
+
+
+// Funciones matemáticas
+pub mod MathFunctions {
+    pub fn to_radians(degree: f32) -> f32 {
+        degree * std::f32::consts::PI / 180.0
+    }
+}

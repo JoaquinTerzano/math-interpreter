@@ -1,4 +1,4 @@
-use crate::structs::{InterpreterError, MathConstants, Node};
+use crate::structs::{InterpreterError, MathConstants, Node, MathFunctions};
 
 pub fn eval(ast: Node) -> Result<f32, InterpreterError> {
     match ast {
@@ -54,9 +54,18 @@ pub fn eval(ast: Node) -> Result<f32, InterpreterError> {
             }
             exp
         }
+
         Node::Number(n) => n
             .parse::<f32>()
             .map_err(|e| InterpreterError::MathError(e.to_string())),
+
+        Node::Degree(n) => {
+            let degree = n.trim_end_matches('o')
+                .parse::<f32>()
+                .map_err(|e| InterpreterError::MathError(e.to_string()))?;
+            
+            return Ok(MathFunctions::to_radians(degree))
+        },
 
         Node::Constant(c) => match c {
             MathConstants::Pi => Ok(std::f32::consts::PI),
